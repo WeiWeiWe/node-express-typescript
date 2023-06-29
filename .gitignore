@@ -6,3 +6,6 @@
 # custom ignore
 dist/
 package-lock.json
+
+# local env files
+.env
