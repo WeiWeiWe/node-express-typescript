@@ -4,10 +4,16 @@ import express, {
   Response,
 } from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import { DataSource } from 'typeorm';
 
 const app: Express = express();
 dotenv.config();
+
+app.use(bodyParser.json());
+
+app.use(cors());
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
