@@ -9,3 +9,6 @@ package-lock.json
 
 # local env files
 .env
+
+# http test files
+*.http
