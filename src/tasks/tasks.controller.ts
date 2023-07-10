@@ -1,19 +1,19 @@
+import { Request, Response } from 'express';
 import { instanceToPlain } from 'class-transformer';
 import { AppDataSource } from '../../index';
 import { Task } from './tasks.entity';
 
-export class TasksController {
-  constructor(
-    private taskRepository = AppDataSource.getRepository(
-      Task,
-    ),
-  ) {}
-
-  public async getAll(): Promise<Task[]> {
+class TasksController {
+  public async getAll(
+    req: Request,
+    res: Response,
+  ): Promise<Response> {
     let allTasks: Task[];
 
     try {
-      allTasks = await this.taskRepository.find({
+      allTasks = await AppDataSource.getRepository(
+        Task,
+      ).find({
         order: {
           date: 'ASC',
         },
@@ -21,10 +21,14 @@ export class TasksController {
 
       allTasks = instanceToPlain(allTasks) as Task[];
 
-      return allTasks;
+      return res.json(allTasks).status(200);
     } catch (err) {
       console.error(err);
-      return Promise.reject();
+      return res
+        .json({ error: 'Internal Server Error' })
+        .status(500);
     }
   }
 }
+
+export const taskController = new TasksController();
